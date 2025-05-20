@@ -1,0 +1,17 @@
+body {
+    background-color: #f4f6f9;
+}
+
+#container-box {
+    max-width: 500px;
+    margin: 60px auto;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+img {
+    max-width: 200px;
+    display: block;
+    margin: 0 auto 10px;
+}
