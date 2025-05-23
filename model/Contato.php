@@ -1,0 +1,20 @@
+<?php
+class Contato {
+    private $conn;
+
+    public function __construct(PDO $conn) {
+        $this->conn = $conn;
+    }
+
+    public function salvar($nome, $telefone, $mensagem, $dataHora) {
+        $sql = "INSERT INTO contatos (nome, telefone, mensagem, data_hora) 
+                VALUES (:nome, :telefone, :mensagem, :dataHora)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':telefone', $telefone);
+        $stmt->bindParam(':mensagem', $mensagem);
+        $stmt->bindParam(':dataHora', $dataHora);
+        return $stmt->execute();
+    }
+}
+?>
