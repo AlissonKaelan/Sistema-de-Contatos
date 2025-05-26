@@ -39,7 +39,12 @@
 
         <div class="mt-4 d-flex justify-content-between">
             <button id="botao-salvar" type="submit" class="btn btn-primary">Salvar Contato</button>
-            <button id="botao-enviar" type="button" class="btn btn-success" disabled>Enviar WhatsApp</button>
+            <button id="botao-enviar" type="button" class="btn btn-success" disabled>
+        <i class="fab fa-whatsapp"></i> Enviar WhatsApp
+        </button>
+
+        <!-- Ícone do WhatsApp (adicionar ao <head>) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         </div>
     </form>
 
