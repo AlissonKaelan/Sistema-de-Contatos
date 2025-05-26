@@ -3,6 +3,7 @@
 require_once '../config/database2.php';
 require_once '../model/Contato.php';
 
+
 $db = (new Database())->getConnection();
 $contato = new Contato($db);
 
@@ -43,7 +44,7 @@ $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
               <a href="editar_contato.php?id=<?= $contato['id'] ?>" class="btn btn-sm btn-warning">
                 <i class="fas fa-edit"></i>
               </a>
-              <a href="excluir.php?id=<?= $contato['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">
+              <a href="../controller/excluir.php?= $contato['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">
                 <i class="fas fa-trash"></i>
               </a>
               <a href="https://wa.me/55<?= preg_replace('/\D/', '', $contato['telefone']) ?>?text=<?= urlencode($contato['mensagem']) ?>" target="_blank" class="btn btn-sm btn-success">
