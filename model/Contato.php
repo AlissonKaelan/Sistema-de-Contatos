@@ -16,5 +16,15 @@ class Contato {
         $stmt->bindParam(':dataHora', $dataHora);
         return $stmt->execute();
     }
+
+    public function telefoneExiste($telefone) {
+        $query = "SELECT COUNT(*) as total FROM contatos WHERE telefone = :telefone";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':telefone', $telefone);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] > 0;
+    }
 }
 ?>
