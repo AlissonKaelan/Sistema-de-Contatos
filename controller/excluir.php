@@ -4,20 +4,18 @@ require_once '../model/Contato.php';
 
 // Verifica se o ID foi passado
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    header("Location: list2.php?erro=1"); // erro: ID inválido
+    header("Location: /alisson/wame/view/list.php?erro=1");
     exit;
 }
 
 $id = $_GET['id'];
 
-// Conecta ao banco e prepara o modelo
 $db = (new Database())->getConnection();
 $contatoModel = new Contato($db);
 
-// Executa a exclusão
 if ($contatoModel->excluir($id)) {
-    header("Location: list2.php?sucesso=2"); // sucesso: contato excluído
+    header("Location: /alisson/wame/view/list.php?sucesso=2");
 } else {
-    header("Location: list2.php?erro=2"); // erro: falha ao excluir
+    header("Location: /alisson/wame/view/list.php?erro=2");
 }
 exit;
