@@ -134,7 +134,7 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-search"></i> Filtrar
             </button>
-            <a href="lista_contatos.php" class="btn btn-secondary">Limpar</a>
+            <a href="#" class="btn btn-secondary" onclick="limparFiltros(event)">Limpar</a>   
           </div>
         </div>
       </form>
@@ -244,5 +244,16 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../public/js/list.js"></script>
+  <script>
+  function limparFiltros(event) {
+  event.preventDefault(); // Evita que o <a href="#"> recarregue a página
+  document.getElementById('nome').value = '';
+  document.getElementById('telefone').value = '';
+  document.getElementById('mensagem').value = '';
+  document.getElementById('data_inicio').value = '';
+  document.getElementById('data_fim').value = '';
+  document.querySelector('form').submit(); // Envia o formulário vazio
+}
+</script>
 </body>
 </html>
