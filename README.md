@@ -1,119 +1,171 @@
+# 📘 Documentação Técnica - Sistema de Contatos com WhatsApp (PHP + MySQL)
 
-# 📱 Projeto: Formulário de Contato com Envio via WhatsApp
-
-Este projeto consiste em um sistema simples para cadastro, listagem e edição de contatos, com envio de mensagens via WhatsApp diretamente do navegador. Ele utiliza PHP para backend, PDO para acesso ao banco de dados, e Bootstrap 5 para o frontend responsivo.
+Este projeto é um sistema completo para cadastro, listagem, edição e envio de mensagens via WhatsApp. Utiliza PHP moderno com PDO, banco de dados MySQL, estrutura MVC simplificada e interface responsiva com Bootstrap 5. Ele permite ao usuário gerenciar contatos com filtros avançados, paginação e ações rápidas.
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Estrutura Geral do Projeto
 
 ```plaintext
-raiz/
+raiz-do-projeto/
+├── config/
+│   └── database2.php              # Conexão com o banco de dados
+│
 ├── controller/
-│   └── ContatoController.php         # Controlador responsável pela lógica de salvar e excluir contatos
+│   ├── ContatoController.php      # Lógica de salvar e excluir contatos
+│   └── excluir.php                # Script para exclusão com confirmação
+│
 ├── model/
-│   └── Contato.php                   # Modelo que encapsula operações no banco de dados usando PDO
+│   └── Contato.php                # Classe com métodos de banco (CRUD, filtros)
+│
 ├── public/
 │   ├── css/
-│   │   ├── style.css                 # Estilos base e específicos para o formulário
-│   │   └── list.css                  # Estilos para a lista de contatos e botões de ação
+│   │   ├── style.css              # Estilo base e formulário
+│   │   └── list.css               # Estilo para a listagem
 │   └── js/
-│       └── main.js                   # Scripts JS para máscaras, validação e envio via WhatsApp
+│       ├── main.js                # Máscara, validação e WhatsApp
+│       └── list.js                # Scripts adicionais
+│
+├── utils/
+│   └── funcoes.php                # Funções auxiliares (formatação de datas etc)
+│
 ├── view/
-│   ├── form.php                     # Formulário principal para cadastro e envio
-│   ├── adicionar_contato.php        # Página para adicionar um novo contato
-│   └── editar_contato.php           # Página para edição de contato existente
-└── list.php                         # Página que lista todos os contatos cadastrados
+│   ├── form.php                   # Formulário principal de envio
+│   ├── adicionar_contato.php      # Tela para novo contato
+│   └── editar_contato.php         # Tela de edição com carregamento dos dados
+│
+├── list.php                       # Lista de todos os contatos (sem filtros)
+├── lista_contatos.php             # Lista com filtros e paginação
+└── index.php                      # Página inicial ou dashboard
 ````
 
 ---
 
-## ✅ Funcionalidades Principais
+## ✅ Funcionalidades
 
-* Validação dos campos obrigatórios e formatação correta do telefone brasileiro
-* Máscara de telefone em tempo real no campo de entrada
-* Contagem de caracteres no campo de mensagem para limitar a 300 caracteres
-* Envio rápido de mensagem via WhatsApp utilizando URL API `https://wa.me/`
-* Alertas visuais e feedbacks usando SweetAlert2 para sucesso, erros e avisos
-* Layout responsivo e moderno com Bootstrap 5
-* Armazenamento dos contatos em banco de dados com PHP PDO
-* Edição e exclusão de contatos diretamente pela lista
-* Estrutura MVC simplificada (Model, View e Controller)
+### 📥 Cadastro e Validação
 
----
+* Validação de campos obrigatórios
+* Máscara para telefone (formato brasileiro com DDD)
+* Limite de 300 caracteres para mensagem
+* Prevenção de envio acidental com Enter
+* Feedback visual com SweetAlert2
 
-## 🧠 Detalhes dos Componentes
+### 🔍 Filtros e Paginação
 
-### Modelo: `model/Contato.php`
+* Filtro por nome, telefone, mensagem, data de início/fim
+* Paginação com 15 contatos por página, mantendo filtros via GET
 
-Classe que gerencia as operações do banco de dados:
+### ✏️ Ações em Contatos
 
-* `__construct(PDO $conn)`: Recebe a conexão PDO
-* `salvar($nome, $telefone, $mensagem, $dataHora)`: Insere um novo contato
-* `telefoneExiste($telefone)`: Verifica se o telefone já está cadastrado
-* `excluir($id)`: Remove contato pelo ID
+* Editar, Excluir com confirmação, Enviar via WhatsApp
+* Link dinâmico via API `https://wa.me/`
+* Botões com ícones (Font Awesome) para ações rápidas
 
-### Controlador: `controller/ContatoController.php`
+### 📦 Armazenamento (Banco de Dados)
 
-Recebe requisições do formulário e realiza as ações de salvar e excluir contatos, além de redirecionar com parâmetros de sucesso ou erro.
+Tabela `contatos`:
 
-### Scripts JS: `public/js/main.js`
-
-* Máscara de telefone brasileira com DDD
-* Validação dos campos em tempo real
-* Contador de caracteres para mensagem
-* Montagem do link para envio via WhatsApp
-* Prevenção de envio acidental ao pressionar Enter
-
-### Estilos CSS
-
-* `style.css`: estilos gerais para o formulário e página principal
-* `list.css`: estilos para a listagem de contatos e botões de ação (call, message, edit, delete)
+| Campo      | Tipo         | Descrição             |
+| ---------- | ------------ | --------------------- |
+| id         | INT (PK)     | Identificador único   |
+| nome       | VARCHAR(100) | Nome do contato       |
+| telefone   | VARCHAR(20)  | Número de telefone    |
+| mensagem   | TEXT         | Mensagem do contato   |
+| data\_hora | DATETIME     | Data/hora do cadastro |
+| data\_update | DATETIME     | Data/hora da edição |
 
 ---
 
-## 🖥️ Views (Interface)
+## 🧠 Lógica do Backend
 
-### `view/form.php`
+### 🔌 Conexão ao Banco
 
-Formulário principal para cadastrar e enviar mensagens via WhatsApp.
+```php
+$db = (new Database())->getConnection();
+```
 
-### `view/adicionar_contato.php`
+### 🔄 Filtros Dinâmicos
 
-Formulário dedicado para adicionar um novo contato, com validação e preenchimento automático da data/hora.
+```php
+if ($nome !== '') {
+    $filtros[] = "nome LIKE :nome";
+    $params[':nome'] = "%$nome%";
+}
+```
 
-### `view/editar_contato.php`
+### 📊 Paginação
 
-Formulário para editar um contato já existente, com dados carregados do banco.
+```php
+$offset = ($pagina_atual - 1) * $limite_por_pagina;
+$sql = "SELECT * FROM contatos $where ORDER BY id DESC LIMIT :limite OFFSET :offset";
+```
 
-### `list.php`
+### 🧮 Contagem Total
 
-Página que lista todos os contatos cadastrados, com opções para ligar, enviar mensagem, editar ou excluir.
-
----
-
-## 💾 Banco de Dados
-
-Tabela `contatos` com os seguintes campos:
-
-| Campo       | Tipo         | Descrição                  |
-| ----------- | ------------ | -------------------------- |
-| `id`        | INT (PK)     | Identificador único        |
-| `nome`      | VARCHAR(100) | Nome do contato            |
-| `telefone`  | VARCHAR(20)  | Número de telefone         |
-| `mensagem`  | TEXT         | Mensagem padrão do contato |
-| `data_hora` | DATETIME     | Data e hora do cadastro    |
+```php
+$sql_count = "SELECT COUNT(*) FROM contatos $where";
+```
 
 ---
 
-## 🚀 Melhorias Futuras
+## 🧩 Tecnologias Utilizadas
 
-* Implementar autenticação de usuários para acesso seguro
-* Adicionar paginação e filtros na lista de contatos
-* Integrar com API oficial do WhatsApp Business para envio direto
-* Painel administrativo com dashboard e relatórios
-* Envio de notificações por e-mail ao cadastrar contato
+* **PHP 8+**
+* **MySQL**
+* **PDO (PHP Data Objects)**
+* **Bootstrap 5.3.3**
+* **Font Awesome 6**
+* **SweetAlert2**
+* **jQuery (opcional)**
+* **HTML5 / CSS3**
 
 ---
 
-## 📄 Licença
+## 🎨 Interface do Usuário
+
+* Interface responsiva para dispositivos móveis
+* Ações com ícones intuitivos
+* Mensagens interativas com SweetAlert2
+* Layout moderno com Bootstrap
+
+---
+
+## 🔒 Segurança
+
+* Uso de `Prepared Statements` com PDO
+* Validação de entrada e sanitização com `htmlspecialchars()`
+* Confirmação visual antes de exclusões
+
+---
+
+## 📸 Exemplo de URL com Filtros
+
+```url
+lista_contatos.php?nome=joao&data_inicio=2024-01-01&pagina=2
+```
+
+---
+
+## 🔮 Melhorias Futuras
+
+* Autenticação (login/admin)
+* Exportação de contatos (CSV, Excel)
+* Busca em tempo real com AJAX
+* Validação de formulários no frontend
+* Integração com WhatsApp Business API
+* Painel de administração com relatórios
+* Log de alterações por contato
+* Notificações por e-mail
+
+---
+
+## 🌐 Dependências Externas
+
+* [Bootstrap 5.3.3](https://getbootstrap.com/)
+* [Font Awesome 6.4](https://fontawesome.com/)
+* [SweetAlert2](https://sweetalert2.github.io/)
+* [jQuery](https://jquery.com/)
+
+---
+
