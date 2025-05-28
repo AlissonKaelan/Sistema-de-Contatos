@@ -1,17 +1,46 @@
 body {
-    background-color: #f4f6f9;
+  background-color: var(--bg-light);
+  color: var(--font-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#container-box {
-    max-width: 500px;
-    margin: 60px auto;
-    background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+h1, h2 {
+  color: var(--primary-color);
 }
 
-img {
-    max-width: 200px;
-    display: block;
-    margin: 0 auto 10px;
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.table th {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 0.5rem;
+}
+
+
+:root {
+  --primary-color: #0d6efd;
+  --secondary-color: #6c757d;
+  --success-color: #198754;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --bg-light: #f8f9fa;
+  --font-color: #343a40;
 }
