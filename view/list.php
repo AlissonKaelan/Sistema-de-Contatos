@@ -6,7 +6,20 @@ require_once '../utils/funcoes.php';
 $db = (new Database())->getConnection();
 $contato = new Contato($db);
 
-$query = $db->query("SELECT * FROM contatos ORDER BY id DESC");
+// Paginação
+$pagina_atual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$limite_por_pagina = 10;
+$offset = ($pagina_atual - 1) * $limite_por_pagina;
+
+// Total de registros
+$total_registros = $db->query("SELECT COUNT(*) FROM contatos")->fetchColumn();
+$total_paginas = ceil($total_registros / $limite_por_pagina);
+
+// Consulta paginada
+$query = $db->prepare("SELECT * FROM contatos ORDER BY id DESC LIMIT :limite OFFSET :offset");
+$query->bindValue(':limite', $limite_por_pagina, PDO::PARAM_INT);
+$query->bindValue(':offset', $offset, PDO::PARAM_INT);
+$query->execute();
 $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -16,7 +29,7 @@ $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
   <meta charset="UTF-8">
   <title>Lista de Contatos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -51,8 +64,8 @@ $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
                 <th class="sortable" data-column="0">Nome <i class="fa-solid fa-sort"></i></th>
                 <th class="sortable" data-column="1">Telefone <i class="fa-solid fa-sort"></i></th>
                 <th class="sortable" data-column="2">Mensagem <i class="fa-solid fa-sort"></i></th>
-                <th class="sortable" data-column="3">Data de Criação<i class="fa-solid fa-sort"></i></th>
-                <th class="sortable" data-column="3">Data de Atualização<i class="fa-solid fa-sort"></i></th>
+                <th class="sortable" data-column="3">Data de Criação <i class="fa-solid fa-sort"></i></th>
+                <th class="sortable" data-column="4">Data de Atualização <i class="fa-solid fa-sort"></i></th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -81,11 +94,52 @@ $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
               <?php endforeach; ?>
             </tbody>
           </table>
+
+          <!-- Paginação -->
+          <div class="d-flex justify-content-center mt-4">
+            <nav>
+              <ul class="pagination">
+                <?php
+                $max_links = 10;
+                $params = $_GET;
+
+                // Botão "Anterior"
+                if ($pagina_atual > 1) {
+                  $params['pagina'] = $pagina_atual - 1;
+                  echo '<li class="page-item"><a class="page-link" href="?' . http_build_query($params) . '">«</a></li>';
+                } else {
+                  echo '<li class="page-item disabled"><span class="page-link">«</span></li>';
+                }
+
+                // Intervalo de páginas
+                $start = max(1, $pagina_atual - floor($max_links / 2));
+                $end = min($total_paginas, $start + $max_links - 1);
+                if (($end - $start + 1) < $max_links) {
+                  $start = max(1, $end - $max_links + 1);
+                }
+
+                for ($i = $start; $i <= $end; $i++) {
+                  $params['pagina'] = $i;
+                  $active = $i == $pagina_atual ? ' active' : '';
+                  echo '<li class="page-item' . $active . '"><a class="page-link" href="?' . http_build_query($params) . '">' . $i . '</a></li>';
+                }
+
+                // Botão "Próximo"
+                if ($pagina_atual < $total_paginas) {
+                  $params['pagina'] = $pagina_atual + 1;
+                  echo '<li class="page-item"><a class="page-link" href="?' . http_build_query($params) . '">»</a></li>';
+                } else {
+                  echo '<li class="page-item disabled"><span class="page-link">»</span></li>';
+                }
+                ?>
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Alerta PHP -->
+    <!-- Alertas -->
     <?php if (isset($_GET['sucesso']) && $_GET['sucesso'] == 2): ?>
       <script>Swal.fire({ icon: 'success', title: 'Sucesso!', text: 'Contato excluído com sucesso.' });</script>
     <?php elseif (isset($_GET['erro']) && $_GET['erro'] == 2): ?>
@@ -94,14 +148,13 @@ $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
       <script>Swal.fire({ icon: 'warning', title: 'Atenção!', text: 'ID inválido para exclusão.' });</script>
     <?php endif; ?>
 
-    <!-- Limpar URL após alerta -->
+    <!-- Limpar parâmetros da URL -->
     <?php if (isset($_GET['sucesso']) || isset($_GET['erro'])): ?>
       <script>window.history.replaceState({}, document.title, window.location.pathname);</script>
     <?php endif; ?>
   </div>
 
-  <!-- JS -->
-
+  <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../public/js/list.js"></script>
