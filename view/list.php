@@ -1,6 +1,7 @@
 <?php
 require_once '../config/database2.php';
 require_once '../model/Contato.php';
+require_once '../utils/funcoes.php';
 
 $db = (new Database())->getConnection();
 $contato = new Contato($db);
@@ -47,9 +48,11 @@ $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
           <table class="table table-hover table-bordered align-middle">
             <thead class="table-primary text-center">
               <tr>
-                <th>Nome</th>
-                <th>Telefone</th>
-                <th>Mensagem</th>
+                <th class="sortable" data-column="0">Nome <i class="fa-solid fa-sort"></i></th>
+                <th class="sortable" data-column="1">Telefone <i class="fa-solid fa-sort"></i></th>
+                <th class="sortable" data-column="2">Mensagem <i class="fa-solid fa-sort"></i></th>
+                <th class="sortable" data-column="3">Data de Criação<i class="fa-solid fa-sort"></i></th>
+                <th class="sortable" data-column="3">Data de Atualização<i class="fa-solid fa-sort"></i></th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -59,6 +62,8 @@ $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
                 <td><?= htmlspecialchars($contato['nome']) ?></td>
                 <td><?= htmlspecialchars($contato['telefone']) ?></td>
                 <td><?= htmlspecialchars($contato['mensagem']) ?></td>
+                <td><?= formatarDataHoraPtBr($contato['data_hora']) ?></td>
+                <td><?= formatarDataHoraPtBr($contato['data_update']) ?></td>
                 <td class="text-center">
                   <a href="editar_contato.php?id=<?= $contato['id'] ?>" class="btn btn-sm btn-warning me-1" title="Editar">
                     <i class="fas fa-edit"></i>
@@ -96,7 +101,9 @@ $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
   </div>
 
   <!-- JS -->
+
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../public/js/list.js"></script>
 </body>
 </html>
