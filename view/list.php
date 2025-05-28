@@ -22,6 +22,9 @@ $contatos = $query->fetchAll(PDO::FETCH_ASSOC);
 <body class="bg-light">
   <div class="container py-5">
     <h2 class="mb-4">Lista de Contatos</h2>
+    <a href="index.php" class="btn btn-secondary mb-3">
+      <i class="fas fa-arrow-left me-1"></i>Voltar
+    </a>
     <a href="adicionar_contato.php" class="btn btn-primary mb-3">
       <i class="fas fa-user-plus me-1"></i> Novo Contato
     </a>
