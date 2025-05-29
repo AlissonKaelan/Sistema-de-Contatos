@@ -140,14 +140,29 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </form>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-hover table-bordered align-middle">
-            <thead class="table-primary text-center">
+          <table id="tabela-contatos" class="table table-striped">
+          <thead class="table-primary text-center">
               <tr>
-                <th>Nome</th>
-                <th>Telefone</th>
-                <th>Mensagem</th>
-                <th>Data de Criação</th>
-                <th>Data de Atualização</th>
+                <th>
+                  Nome
+                  <i class="fa-solid fa-sort" data-col="0" style="cursor: pointer;"></i>
+                </th>
+                <th>
+                  Telefone
+                  <i class="fa-solid fa-sort" data-col="1" style="cursor: pointer;"></i>
+                </th>
+                <th>
+                  Mensagem
+                  <i class="fa-solid fa-sort" data-col="2" style="cursor: pointer;"></i>
+                </th>
+                <th>
+                  Data de Criação
+                  <i class="fa-solid fa-sort" data-col="3" style="cursor: pointer;"></i>
+                </th>
+                <th>
+                  Data de Atualização
+                  <i class="fa-solid fa-sort" data-col="4" style="cursor: pointer;"></i>
+                </th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -254,6 +269,43 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
   document.getElementById('data_fim').value = '';
   document.querySelector('form').submit(); // Envia o formulário vazio
 }
+</script>
+
+<script>
+document.querySelectorAll(".fa-sort").forEach(icon => {
+  let ascending = true;
+
+  icon.addEventListener("click", () => {
+    const table = document.getElementById("tabela-contatos");
+    const tbody = table.querySelector("tbody");
+    const column = parseInt(icon.getAttribute("data-col"));
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+
+    rows.sort((a, b) => {
+      const cellA = a.children[column].innerText.trim().toLowerCase();
+      const cellB = b.children[column].innerText.trim().toLowerCase();
+
+      // Verifica se é número ou data
+      const isNumeric = !isNaN(cellA) && !isNaN(cellB);
+      const isDate = !isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB));
+
+      if (isNumeric) {
+        return ascending ? cellA - cellB : cellB - cellA;
+      } else if (isDate) {
+        return ascending ? new Date(cellA) - new Date(cellB) : new Date(cellB) - new Date(cellA);
+      } else {
+        return ascending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+      }
+    });
+
+    // Remove linhas e reinsere ordenadas
+    tbody.innerHTML = "";
+    rows.forEach(row => tbody.appendChild(row));
+
+    // Alterna direção
+    ascending = !ascending;
+  });
+});
 </script>
 </body>
 </html>
