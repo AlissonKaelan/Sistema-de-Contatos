@@ -12,6 +12,8 @@ $telefone   = trim($_GET['telefone'] ?? '');
 $mensagem   = trim($_GET['mensagem'] ?? '');
 $data_inicio = trim($_GET['data_inicio'] ?? '');
 $data_fim   = trim($_GET['data_fim'] ?? '');
+$data_inicio_update = trim($_GET['data_inicio_update'] ?? '');
+$data_fim_update   = trim($_GET['data_fim_update'] ?? '');
 
 // Paginação
 $pagina_atual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
@@ -41,6 +43,14 @@ if ($data_inicio !== '') {
 if ($data_fim !== '') {
     $filtros[] = "data_hora <= :data_fim";
     $params[':data_fim'] = $data_fim . " 23:59:59";
+}
+if ($data_inicio_update !== '') {
+    $filtros[] = "data_update >= :data_inicio_update";
+    $params[':data_inicio_update'] = $data_inicio_update . " 00:00:00";
+}
+if ($data_fim_update !== '') {
+    $filtros[] = "data_update <= :data_fim_update";
+    $params[':data_fim_update'] = $data_fim_update . " 23:59:59";
 }
 
 $where = '';
@@ -123,12 +133,20 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="row g-3 mt-2">
           <div class="col-md-3">
-            <label for="data_inicio" class="form-label">Data Início</label>
+            <label for="data_inicio" class="form-label">Data Início de Criação</label>
             <input type="date" id="data_inicio" name="data_inicio" class="form-control" value="<?= htmlspecialchars($data_inicio) ?>">
           </div>
           <div class="col-md-3">
-            <label for="data_fim" class="form-label">Data Fim</label>
+            <label for="data_fim" class="form-label">Data Fim de Criação</label>
             <input type="date" id="data_fim" name="data_fim" class="form-control" value="<?= htmlspecialchars($data_fim) ?>">
+          </div>
+          <div class="col-md-3">
+            <label for="data_inicio_update" class="form-label">Data Início de Atualização</label>
+            <input type="date" id="data_inicio_update" name="data_inicio_update" class="form-control" value="<?= htmlspecialchars($data_inicio_update) ?>">
+          </div>
+          <div class="col-md-3">
+            <label for="data_fim_update" class="form-label">Data Fim de Atualização</label>
+            <input type="date" id="data_fim_update" name="data_fim_update" class="form-control" value="<?= htmlspecialchars($data_fim_update) ?>">
           </div>
           <div class="col-md-6 d-flex align-items-end justify-content-end gap-2">
             <button type="submit" class="btn btn-primary">
@@ -261,13 +279,15 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <script src="../public/js/list.js"></script>
   <script>
   function limparFiltros(event) {
-  event.preventDefault(); // Evita que o <a href="#"> recarregue a página
+  event.preventDefault(); 
   document.getElementById('nome').value = '';
   document.getElementById('telefone').value = '';
   document.getElementById('mensagem').value = '';
   document.getElementById('data_inicio').value = '';
   document.getElementById('data_fim').value = '';
-  document.querySelector('form').submit(); // Envia o formulário vazio
+  document.getElementById('data_inicio_update').value = '';
+  document.getElementById('data_fim_update').value = '';
+  document.querySelector('form').submit();
 }
 </script>
 
