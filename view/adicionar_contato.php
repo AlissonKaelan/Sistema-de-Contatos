@@ -39,7 +39,7 @@
                 <textarea name="mensagem" id="mensagem" class="form-control" rows="3" required maxlength="300">Mensagem enviada</textarea>
               </div>
 
-              <input type="hidden" name="dataHora" id="dataHora">
+              
 
               <div class="d-flex justify-content-between">
                 <a href="list.php" class="btn btn-secondary">
@@ -60,10 +60,8 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Preenche automaticamente o campo dataHora -->
-  <script>
-    document.getElementById('dataHora').value = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  </script>
+  
+  
 
   <?php if (isset($_GET['sucesso']) && $_GET['sucesso'] == 1): ?>
   <script>
