@@ -15,11 +15,11 @@ class Database {
         $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
         $dotenv->load();
 
-        $this->host = $_ENV['DB_HOST'];
-        $this->port = $_ENV['DB_PORT']; // <-- NOVO
-        $this->db_name = $_ENV['DB_NAME'];
-        $this->username = $_ENV['DB_USER'];
-        $this->password = $_ENV['DB_PASS'];
+        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
+        $this->port = $_ENV['DB_PORT'] ?? '3306';
+        $this->db_name = $_ENV['DB_NAME'] ?? '';
+        $this->username = $_ENV['DB_USER'] ?? 'root';
+        $this->password = $_ENV['DB_PASS'] ?? '';
     }
 
     public function getConnection() {

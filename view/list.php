@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database2.php';
+require_once '../config/database.php';
 require_once '../model/Contato.php';
 require_once '../utils/funcoes.php';
 
@@ -197,18 +197,20 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($contato['mensagem']) ?></td>
                     <td><?= formatarDataHoraPtBr($contato['data_hora']) ?></td>
                     <td><?= formatarDataHoraPtBr($contato['data_update']) ?></td>
-                    <td class="text-center">
-                      <a href="editar_contato.php?id=<?= $contato['id'] ?>" class="btn btn-sm btn-warning me-1" title="Editar">
-                        <i class="fas fa-edit"></i>
-                      </a>
-                      <a href="../controller/excluir.php?id=<?= $contato['id'] ?>" class="btn btn-sm btn-danger me-1" title="Excluir"
-                         onclick="return confirm('Tem certeza que deseja excluir?')">
-                        <i class="fas fa-trash"></i>
-                      </a>
-                      <a href="https://wa.me/55<?= preg_replace('/\D/', '', $contato['telefone']) ?>?text=<?= urlencode($contato['mensagem']) ?>" 
-                         target="_blank" class="btn btn-sm btn-success" title="Enviar WhatsApp">
-                        <i class="fab fa-whatsapp"></i>
-                      </a>
+                    <td class="text-center"> 
+                      <div class="d-flex justify-content-center gap-2">
+                        <a href="editar_contato.php?id=<?= $contato['id'] ?>" class="btn btn-sm btn-warning" title="Editar">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="../controller/excluir.php?id=<?= $contato['id'] ?>" class="btn btn-sm btn-danger" title="Excluir"
+                          onclick="return confirm('Tem certeza que deseja excluir?')">
+                          <i class="fas fa-trash"></i>
+                        </a>
+                        <a href="https://wa.me/55<?= preg_replace('/\D/', '', $contato['telefone']) ?>?text=<?= urlencode($contato['mensagem']) ?>" 
+                          target="_blank" class="btn btn-sm btn-success" title="Enviar WhatsApp">
+                          <i class="fab fa-whatsapp"></i>
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 <?php endforeach; ?>
