@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once '../config/database2.php';
 require_once '../model/Contato.php';
 require_once '../utils/funcoes.php';
 
@@ -84,7 +84,9 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Lista de Contatos</title>
+  <h4 class="mb-0">
+  <i class="fas fa-address-book me-2"></i>Lista de Contatos
+  </h4>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Bootstrap -->
@@ -105,10 +107,10 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Lista de Contatos</h4>
         <div>
-          <a href="index.php" class="btn btn-outline-light me-2">
+          <a href="index.php" class="btn btn-outline-light btn-sm me-2">
             <i class="fas fa-arrow-left me-1"></i>Voltar
           </a>
-          <a href="adicionar_contato.php" class="btn btn-light text-primary">
+          <a href="adicionar_contato.php" class="btn btn-light text-primary btn-sm">
             <i class="fas fa-user-plus me-1"></i>Novo Contato
           </a>
         </div>
