@@ -5,6 +5,7 @@ use Dotenv\Dotenv;
 
 class Database {
     private $host;
+    private $port;
     private $db_name;
     private $username;
     private $password;
@@ -15,6 +16,7 @@ class Database {
         $dotenv->load();
 
         $this->host = $_ENV['DB_HOST'];
+        $this->port = $_ENV['DB_PORT']; // <-- NOVO
         $this->db_name = $_ENV['DB_NAME'];
         $this->username = $_ENV['DB_USER'];
         $this->password = $_ENV['DB_PASS'];
@@ -23,8 +25,9 @@ class Database {
     public function getConnection() {
         if ($this->conn === null) {
             try {
+                $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->db_name};charset=utf8mb4";
                 $this->conn = new PDO(
-                    "mysql:host={$this->host};dbname={$this->db_name};charset=utf8mb4",
+                    $dsn,
                     $this->username,
                     $this->password,
                     [
