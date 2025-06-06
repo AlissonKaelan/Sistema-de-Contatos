@@ -12,12 +12,15 @@ class Database {
     private $conn = null;
 
     public function __construct() {
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-        $dotenv->load();
+        // Carrega o .env apenas se ainda não estiver carregado
+        if (!isset($_ENV['DB_HOST'])) {
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+            $dotenv->safeLoad(); // safeLoad evita erros se já estiver carregado
+        }
 
-        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
-        $this->port = $_ENV['DB_PORT'] ?? '3306';
-        $this->db_name = $_ENV['DB_NAME'] ?? '';
+        $this->host     = $_ENV['DB_HOST'] ?? '127.0.0.1';
+        $this->port     = $_ENV['DB_PORT'] ?? '3306';
+        $this->db_name  = $_ENV['DB_NAME'] ?? '';
         $this->username = $_ENV['DB_USER'] ?? 'root';
         $this->password = $_ENV['DB_PASS'] ?? '';
     }
