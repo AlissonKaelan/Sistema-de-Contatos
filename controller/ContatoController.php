@@ -1,5 +1,5 @@
 <?php
-
+require_once '../utils/funcoes.php';
 require_once '../config/database.php';
 require_once '../model/Contato.php';
 
@@ -22,10 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // 5. Validação do formato de telefone
-    function telefoneValido($telefone) {
-        return preg_match('/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/', $telefone);
-    }
 
     if (!telefoneValido($telefone)) {
         header("Location: ../view/index.php?erro=4");
