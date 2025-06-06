@@ -18,11 +18,11 @@ class Database {
             $dotenv->safeLoad(); // safeLoad evita erros se já estiver carregado
         }
 
-        $this->host     = $_ENV['DB_HOST'] ?? '127.0.0.1';
-        $this->port     = $_ENV['DB_PORT'] ?? '3306';
-        $this->db_name  = $_ENV['DB_NAME'] ?? '';
-        $this->username = $_ENV['DB_USER'] ?? 'root';
-        $this->password = $_ENV['DB_PASS'] ?? '';
+        $this->host     = $_ENV['DB_HOST'];
+        $this->port     = $_ENV['DB_PORT'];
+        $this->db_name  = $_ENV['DB_NAME'];
+        $this->username = $_ENV['DB_USER'];
+        $this->password = $_ENV['DB_PASS'];
     }
 
     public function getConnection() {
