@@ -13,5 +13,10 @@ function formatarTelefone($telefone) {
 
 // 5. Validação do formato de telefone
     function telefoneValido($telefone) {
-        return preg_match('/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/', $telefone);
-    }
+    $telefone = normalizarTelefone($telefone);
+      return preg_match('/^\d{10,11}$/', $telefone);
+  }
+
+    function normalizarTelefone($telefone) {
+    return preg_replace('/\D+/', '', $telefone); // Remove tudo que não for número
+}

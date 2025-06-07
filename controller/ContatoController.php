@@ -10,7 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 2. Recebe e trata os dados do formulário
     $nome     = htmlspecialchars(trim($_POST['nome'] ?? ''));
-    $telefone = htmlspecialchars(trim($_POST['telefone'] ?? ''));
+    $telefoneOriginal = htmlspecialchars(trim($_POST['telefone'] ?? ''));
+    $telefone = normalizarTelefone($telefoneOriginal);
     $mensagem = htmlspecialchars(trim($_POST['mensagem'] ?? ''));
 
     // 3. Gera a data e hora atual no servidor
