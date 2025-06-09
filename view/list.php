@@ -202,10 +202,9 @@ $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <a href="editar_contato.php?id=<?= $contato['id'] ?>" class="btn btn-sm btn-warning" title="Editar">
                           <i class="fas fa-edit"></i>
                         </a>
-                        <a href="../controller/excluir.php?id=<?= $contato['id'] ?>" class="btn btn-sm btn-danger" title="Excluir"
-                          onclick="return confirm('Tem certeza que deseja excluir?')">
+                        <button class="btn btn-sm btn-danger" onclick="confirmarExclusao(<?= $contato['id'] ?>)" title="Excluir">
                           <i class="fas fa-trash"></i>
-                        </a>
+                        </button>
                         <a href="https://wa.me/55<?= preg_replace('/\D/', '', $contato['telefone']) ?>?text=<?= urlencode($contato['mensagem']) ?>" 
                           target="_blank" class="btn btn-sm btn-success" title="Enviar WhatsApp">
                           <i class="fab fa-whatsapp"></i>
@@ -330,6 +329,26 @@ document.querySelectorAll(".fa-sort").forEach(icon => {
     ascending = !ascending;
   });
 });
+</script>
+
+<script>
+function confirmarExclusao(id) {
+  Swal.fire({
+    title: 'Tem certeza?',
+    text: "Esta ação não pode ser desfeita!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Sim, excluir!',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Redireciona para o controller de exclusão com flag de sucesso
+      window.location.href = `../controller/excluir.php?id=${id}`;
+    }
+  });
+}
 </script>
 </body>
 </html>

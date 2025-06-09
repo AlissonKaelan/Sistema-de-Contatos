@@ -2,24 +2,34 @@
 require_once '../config/database.php';
 require_once '../model/Contato.php';
 
+session_start();
+
 $db = (new Database())->getConnection();
 $contatoModel = new Contato($db);
 
-$id = $_GET['id'] ?? null;
-
+// Valida o ID vindo da URL
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$id) {
     header('Location: list.php');
     exit;
 }
 
+// Busca o contato no banco
 $stmt = $db->prepare("SELECT * FROM contatos WHERE id = ?");
 $stmt->execute([$id]);
 $contato = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Se o contato não existir, redireciona
+if (!$contato) {
+    echo "<div class='alert alert-danger text-center mt-5'>Contato não encontrado.</div>";
+    exit;
+}
+
+// Processa o formulário de edição
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome = $_POST['nome'];
-    $telefone = $_POST['telefone'];
-    $mensagem = $_POST['mensagem'];
+    $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_SPECIAL_CHARS);
+    $telefone = filter_input(INPUT_POST, 'telefone', FILTER_SANITIZE_STRING);
+    $mensagem = filter_input(INPUT_POST, 'mensagem', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $update = $db->prepare("UPDATE contatos SET nome=?, telefone=?, mensagem=? WHERE id=?");
     $update->execute([$nome, $telefone, $mensagem, $id]);
