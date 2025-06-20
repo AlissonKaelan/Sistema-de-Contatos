@@ -1,68 +1,55 @@
-# 📘 Documentação Técnica - Sistema de Contatos com WhatsApp (PHP + MySQL)
+# 📒 Sistema de Contatos com WhatsApp
 
-Este projeto é um sistema completo para cadastro, listagem, edição e envio de mensagens via WhatsApp. Utiliza PHP moderno com PDO, banco de dados MySQL, arquitetura MVC simplificada e interface responsiva com Bootstrap 5. Permite ao usuário gerenciar contatos com filtros avançados, paginação, ações rápidas e confirmações visuais.
+Este projeto é um sistema web para cadastro, listagem, edição e envio de mensagens via WhatsApp, desenvolvido em PHP com PDO e MySQL. Possui interface responsiva com Bootstrap 5, arquitetura MVC simplificada e recursos de usabilidade como filtros, paginação e alertas visuais.
 
 ---
 
-## 📁 Estrutura Geral do Projeto
+## 📁 Estrutura de Pastas
 
-```plaintext
-raiz-do-projeto/
+```
+Sistema-de-Contatos/
 ├── config/
-│   └── database2.php              # Configuração e conexão com o banco de dados
-│
+│   └── database.php
 ├── controller/
-│   ├── ContatoController.php      # Controlador principal de contatos (CRUD)
-│   └── excluir.php                # Script para exclusão com confirmação
-│
+│   ├── ContatoController.php
+│   └── excluir.php
 ├── model/
-│   └── Contato.php                # Modelo com métodos de banco (CRUD, filtros)
-│
+│   └── Contato.php
 ├── public/
 │   ├── css/
-│   │   ├── style.css              # Estilo base e de formulários
-│   │   └── list.css               # Estilo para a listagem de contatos
+│   │   ├── list.css
+│   │   └── style.css
 │   └── js/
-│       ├── main.js                # Máscara, validação e integração WhatsApp
-│       └── list.js                # Scripts para listagem e ações rápidas
-│
+│       ├── list.js
+│       └── main.js
 ├── utils/
-│   └── funcoes.php                # Funções auxiliares (formatação, validação)
-│
+│   └── funcoes.php
 ├── view/
-│   ├── form.php                   # Formulário principal de envio/edição
-│   ├── adicionar_contato.php      # Tela para adicionar novo contato
-│   ├── editar_contato.php         # Tela de edição com carregamento dinâmico
-│   ├── list.php                   # Listagem avançada com filtros e paginação
-│   └── index.php                      # Página inicial (dashboard)    
-
+│   ├── adicionar_contato.php
+│   ├── editar_contato.php
+│   ├── index.php
+│   └── list.php
+├── composer.json
+├── composer.lock
+├── .gitignore
+└── README.md
 ```
 
 ---
 
 ## ✅ Funcionalidades
 
-### 📥 Cadastro e Validação
+- Cadastro, edição e exclusão de contatos
+- Máscara e validação de telefone brasileiro
+- Filtros avançados por nome, telefone, mensagem e datas
+- Paginação de resultados
+- Envio rápido de mensagem via WhatsApp Web
+- Alertas visuais com SweetAlert2
+- Interface responsiva com Bootstrap
 
-* Validação de campos obrigatórios e formatos
-* Máscara para telefone (padrão brasileiro com DDD)
-* Limite de 300 caracteres para mensagem
-* Prevenção de envio acidental (Enter)
-* Feedback visual com SweetAlert2
+---
 
-### 🔍 Filtros e Paginação
-
-* Filtro por nome, telefone, mensagem, data de início/fim
-* Paginação com 15 contatos por página, mantendo filtros via GET
-* Contagem total de registros filtrados
-
-### ✏️ Ações em Contatos
-
-* Editar, Excluir (com confirmação), Enviar via WhatsApp
-* Link dinâmico via API `https://wa.me/`
-* Botões com ícones (Font Awesome) para ações rápidas
-
-### 📦 Armazenamento (Banco de Dados)
+## 🗄️ Banco de Dados
 
 Tabela `contatos`:
 
@@ -77,95 +64,59 @@ Tabela `contatos`:
 
 ---
 
-## 🧠 Lógica do Backend
+## ⚙️ Tecnologias Utilizadas
 
-### 🔌 Conexão ao Banco
-
-```php
-$db = (new Database())->getConnection();
-```
-
-### 🔄 Filtros Dinâmicos
-
-```php
-if ($nome !== '') {
-    $filtros[] = "nome LIKE :nome";
-    $params[':nome'] = "%$nome%";
-}
-```
-
-### 📊 Paginação
-
-```php
-$offset = ($pagina_atual - 1) * $limite_por_pagina;
-$sql = "SELECT * FROM contatos $where ORDER BY id DESC LIMIT :limite OFFSET :offset";
-```
-
-### 🧮 Contagem Total
-
-```php
-$sql_count = "SELECT COUNT(*) FROM contatos $where";
-```
-
----
-
-## 🧩 Tecnologias Utilizadas
-
-* **PHP 8+**
-* **MySQL**
-* **PDO (PHP Data Objects)**
-* **Bootstrap 5.3.3**
-* **Font Awesome 6**
-* **SweetAlert2**
-* **jQuery (opcional)**
-* **HTML5 / CSS3**
-
----
-
-## 🎨 Interface do Usuário
-
-* Interface responsiva para dispositivos móveis
-* Ações rápidas com ícones intuitivos
-* Mensagens interativas com SweetAlert2
-* Layout moderno com Bootstrap
+- PHP 8+ (PDO)
+- MySQL
+- Bootstrap 5
+- Font Awesome 6
+- SweetAlert2
+- jQuery (opcional)
+- Composer (para Dotenv)
 
 ---
 
 ## 🔒 Segurança
 
-* Uso de `Prepared Statements` com PDO
-* Validação e sanitização de entrada com `htmlspecialchars()`
-* Confirmação visual antes de exclusões
-* Separação de responsabilidades (MVC)
+- Uso de prepared statements (PDO) para evitar SQL Injection
+- Validação e sanitização de entradas
+- Confirmação visual antes de exclusão
+- Separação de responsabilidades (MVC)
 
 ---
 
-## 📸 Exemplo de URL com Filtros
+## 🚀 Como Executar
 
-```url
-lista_contatos.php?nome=joao&data_inicio=2024-01-01&pagina=2
-```
+1. **Clone o repositório**
+2. **Configure o arquivo `.env`** com os dados do seu banco MySQL:
+   ```
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_NAME=seu_banco
+   DB_USER=usuario
+   DB_PASS=senha
+   ```
+3. **Instale as dependências** com Composer:
+   ```
+   composer install
+   ```
+4. **Implemente a tabela `contatos`** no seu banco de dados.
+5. **Acesse a pasta `/view`** pelo navegador para utilizar o sistema.
 
 ---
 
 ## 🔮 Melhorias Futuras
 
-* Autenticação (login/admin)
-* Exportação de contatos (CSV, Excel)
-* Busca em tempo real com AJAX
-* Validação de formulários no frontend
-* Integração com WhatsApp Business API
-* Painel de administração com relatórios
-* Log de alterações por contato
-* Notificações por e-mail
+- Autenticação de usuários (login/admin)
+- Exportação de contatos (CSV, Excel)
+- Busca em tempo real (AJAX)
+- Integração com WhatsApp Business API
+- Log de alterações por contato
 
 ---
 
-## 🌐 Dependências Externas
+## 📄 Licença
 
-* [Bootstrap 5.3.3](https://getbootstrap.com/)
-* [Font Awesome 6.4](https://fontawesome.com/)
-* [SweetAlert2](https://sweetalert2.github.io/)
-* [jQuery](https://jquery.com/)
+Este projeto é livre para uso acadêmico e pessoal.
 
 ---
